@@ -1,0 +1,51 @@
+[gd_scene load_steps=10 format=3 uid="uid://40n1mc64t0c4"]
+
+[ext_resource type="Script" path="res://objects/chest.gd" id="1_xi06x"]
+[ext_resource type="PackedScene" uid="uid://d3xdc64dax60a" path="res://blends/chest.blend" id="2_fh826"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fkegy"]
+size = Vector3(1.89494, 1.44837, 1)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rvwv0"]
+animation = &"normal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f7c2g"]
+animation = &"open"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kin54"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5bhbn"]
+advance_mode = 2
+advance_condition = &"is_opening"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_bunes"]
+states/normal/node = SubResource("AnimationNodeAnimation_rvwv0")
+states/normal/position = Vector2(388, 51.3333)
+states/open/node = SubResource("AnimationNodeAnimation_f7c2g")
+states/open/position = Vector2(517.333, 82)
+transitions = ["Start", "normal", SubResource("AnimationNodeStateMachineTransition_kin54"), "normal", "open", SubResource("AnimationNodeStateMachineTransition_5bhbn")]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_mi07h"]
+
+[node name="chest" type="CharacterBody3D"]
+collision_layer = 5
+script = ExtResource("1_xi06x")
+
+[node name="chest" parent="." instance=ExtResource("2_fh826")]
+
+[node name="Cylinder" parent="chest" index="1"]
+transform = Transform3D(-7.61317e-07, 2.2, -1.78812e-07, -0.0748624, -5.17669e-07, -0.997194, -0.997194, -1.64075e-06, 0.0748624, -0.0702703, 1.08122, -1.01031)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.128496, 0.932866, -0.390888)
+shape = SubResource("BoxShape3D_fkegy")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_bunes")
+anim_player = NodePath("../chest/AnimationPlayer")
+active = true
+parameters/playback = SubResource("AnimationNodeStateMachinePlayback_mi07h")
+parameters/conditions/is_opening = false
+
+[editable path="chest"]

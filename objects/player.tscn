@@ -1,0 +1,73 @@
+[gd_scene load_steps=11 format=3 uid="uid://7d57sd84bkig"]
+
+[ext_resource type="Script" path="res://objects/player.gd" id="1_8iken"]
+[ext_resource type="PackedScene" uid="uid://bqmkpsyt7jes5" path="res://blends/player.blend" id="2_ox5g8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0hyyk"]
+size = Vector3(4.35178, 4.84949, 1)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1m1d6"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hyg21"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8fib7"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_be57w"]
+advance_mode = 2
+advance_condition = &"is_walking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1txif"]
+advance_mode = 2
+advance_condition = &"is_idle"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_pljch"]
+states/idle/node = SubResource("AnimationNodeAnimation_1m1d6")
+states/idle/position = Vector2(346.667, 46)
+states/walk/node = SubResource("AnimationNodeAnimation_hyg21")
+states/walk/position = Vector2(488, 86)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_8fib7"), "idle", "walk", SubResource("AnimationNodeStateMachineTransition_be57w"), "walk", "idle", SubResource("AnimationNodeStateMachineTransition_1txif")]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_iohls"]
+
+[node name="player" type="CharacterBody3D"]
+script = ExtResource("1_8iken")
+SPEED = 15.0
+TURNING = 50
+JUMP_VELOCITY = 8.0
+
+[node name="player" parent="." instance=ExtResource("2_ox5g8")]
+
+[node name="Skeleton3D" parent="player/Armature" index="0"]
+bones/1/rotation = Quaternion(0.0572072, 0.000208299, 0.00333537, 0.998357)
+bones/3/rotation = Quaternion(0.138352, 0.0455764, -0.35122, 0.924893)
+bones/4/rotation = Quaternion(-0.0283313, 0.00108821, -0.0194778, 0.999408)
+bones/6/rotation = Quaternion(0.0510709, 0.027292, 0.446529, 0.892893)
+bones/7/rotation = Quaternion(-0.0316545, -0.0053055, -0.0143909, 0.999381)
+bones/9/rotation = Quaternion(-0.415026, -0.0202978, 0.0391924, 0.908738)
+bones/12/rotation = Quaternion(-0.507626, 0.0514603, -0.00974533, 0.859984)
+bones/13/rotation = Quaternion(-0.0210084, 0.00506006, -0.0364106, 0.999103)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.295601, 0)
+shape = SubResource("BoxShape3D_0hyyk")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, -2.62565e-08, 0.953832, 0.30034, 8.33867e-08, 0.30034, -0.953832, 0, 1.55055, -3.40564)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_pljch")
+anim_player = NodePath("../player/AnimationPlayer")
+active = true
+parameters/playback = SubResource("AnimationNodeStateMachinePlayback_iohls")
+parameters/conditions/is_idle = false
+parameters/conditions/is_walking = false
+
+[node name="jump_ray" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.59163, 0)
+target_position = Vector3(0, -3, 0)
+collision_mask = 4
+
+[editable path="player"]

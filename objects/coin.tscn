@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dt7mf5sq4rdou"]
+
+[ext_resource type="PackedScene" uid="uid://dwrs26cr05db" path="res://blends/coin.blend" id="1_ubw7i"]
+
+[node name="coin" type="Node3D"]
+
+[node name="coin" parent="." instance=ExtResource("1_ubw7i")]

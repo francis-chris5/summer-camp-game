@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8vcm2ad3taxn"]
+
+[ext_resource type="Script" path="res://objects/hud.gd" id="1_sosun"]
+
+[node name="hud" type="CanvasLayer"]
+script = ExtResource("1_sosun")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 119.0
+offset_top = 51.0
+offset_right = 239.0
+offset_bottom = 171.0
+
+[node name="score_label" type="RichTextLabel" parent="Panel"]
+offset_left = 12.0
+offset_top = 38.0
+offset_right = 132.0
+offset_bottom = 78.0
+text = "Score: 0"
